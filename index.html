@@ -10453,7 +10453,6 @@ function closeDetailPage() {
 (function(){
 'use strict';
 
-const VA_API_KEY = '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';  
 window._SV_API_KEY = null;
 
 const btn       = document.getElementById('voiceBtn');
@@ -10523,20 +10522,12 @@ async function askClaude(userText) {
   convHistory.push({ role:'user', content: userText });
   if (convHistory.length > 10) convHistory = convHistory.slice(-10);
 
-  const apiKey = window._SV_API_KEY || VA_API_KEY;
-  if (!apiKey) {
-    return { spoken: 'Cheia API lipseste. Adauga cheia Anthropic in VA_API_KEY.', display: '<span class="err">&#9888; VA_API_KEY lipseste</span>', actions: [] };
-  }
-
   let res;
   try {
-    res = await fetch('https://api.anthropic.com/v1/messages', {
+    res = await fetch('/.netlify/functions/claude', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
